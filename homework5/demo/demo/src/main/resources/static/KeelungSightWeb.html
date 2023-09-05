@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ch">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>基隆景點</title>
+        <script src="https://code.jquery.com/jquery-3.7.0.js" integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    </head>
+    <body>
+        <div class="container-fluid mt-5">
+            <button type="button" class="col-sm-1 p-3 btn btn-dark getDataBtn" data-url="中山區">中山區</button>
+            <button type="button" class="col-sm-1 p-3 btn btn-dark getDataBtn" data-url="信義區">信義區</button>
+            <button type="button" class="col-sm-1 p-3 btn btn-dark getDataBtn" data-url="仁愛區">仁愛區</button>
+            <button type="button" class="col-sm-1 p-3 btn btn-dark getDataBtn" data-url="中正區">中正區</button>
+            <button type="button" class="col-sm-1 p-3 btn btn-dark getDataBtn" data-url="安樂區">安樂區</button>
+            <button type="button" class="col-sm-1 p-3 btn btn-dark getDataBtn" data-url="七堵區">七堵區</button>
+            <button type="button" class="col-sm-1 p-3 btn btn-dark getDataBtn" data-url="暖暖區">暖暖區</button>
+            <div id="cardContainer" class="row mt-3"></div>
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+
+        <script>
+            $(document).ready(function(){
+                $(".getDataBtn").click(function(){
+                    var url = $(this).data("url");
+                    $.ajax({
+                        url: "http://localhost:8080/sight?zone=" + url,
+                        method: "GET",
+                        dataType: "json",
+                        success: function(data){
+                            displayCards(data);
+                        },
+                        error: function(){
+                            alert("無法取得數據，請稍後再試！");
+                        }
+                    });
+                });
+
+                function displayCards(data){
+                    $("#cardContainer").empty();
+                    data.forEach(function(item){
+                        var cardHtml = `
+                            <div class="col-md-4">
+                              <div class="card mb-4 shadow">
+                                <div class="card-body">
+                                  <h5 class="card-sightName">${item.sightName}</h5>
+                                  <p class="card-zone">${item.zone}</p>
+                                  <p class="card-category">${item.category}</p>
+                                  <a href=${item.address} target="_blank" class="btn btn-dark">地址</a>
+                                  <button type="button" class="btn btn-dark" data-bs-toggle="collapse" data-bs-target="#detail-${item.sightName}">詳細資訊</button>
+                                    <div class="collapse" id="detail-${item.sightName}">
+                                      ${item.photoURL ? `
+                                        <img src="${item.photoURL}" class="card-img-top mt-4" alt="Card image">
+                                      ` : '' }
+                                      <p class="card-description mt-4">${item.description}</p>
+                                    </div>
+                                </div>
+                              </div>
+                            </div>
+                        `;
+                        $("#cardContainer").append(cardHtml);
+                    });
+                }
+            });
+        </script>
+    </body>
+</html>
