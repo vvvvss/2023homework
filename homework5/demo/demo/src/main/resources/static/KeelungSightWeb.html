@@ -26,7 +26,7 @@
                 $(".getDataBtn").click(function(){
                     var url = $(this).data("url");
                     $.ajax({
-                        url: "http://localhost:8080/sight?zone=" + url,
+                        url: "sight?zone=" + url,
                         method: "GET",
                         dataType: "json",
                         success: function(data){

@@ -38,6 +38,7 @@ public class KeelungSightsCrawler {
 
     @PostConstruct
     public void runCrawlerAndSaveToMongoDB(){
+        sightRepository.deleteAll();
         sightRepository.saveAll(sightList);
     }
 }
