@@ -39,7 +39,6 @@ public class KeelungSightsCrawler implements ApplicationRunner {
     }
 
 
-
     @Override
     public void run(ApplicationArguments args) throws Exception {
         sightRepository.deleteAll();
